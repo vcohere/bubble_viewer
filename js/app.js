@@ -1,7 +1,3 @@
-$(document).ready(function() {
-    $('#test').bubble({test1: 30, test2: 10, test3: 40});
-});
-
 (function($) {
     var getNbElems = function(data) {
         var res = 0;
@@ -26,26 +22,47 @@ $(document).ready(function() {
             height = $(this).height(),
             biggestBubble = getBiggestBubble(data),
             bubbleCount = getNbElems(data);
-        var vMin = width < height ? height : width;
-        var maxSize = vMin / bubbleCount;
+        var vMin = width < height ? width : width;
+        var maxSize = vMin / bubbleCount * 1.2,
+            lastBr = 0;
+
+        $(this).css('text-align', 'center');
 
         for (var i in data) {
+            switch(lastBr) {
+                case 1:
+                    lastBr = 2;
+                    break;
+                case 2:
+                    lastBr = 0;
+                    break;
+            }
             var tmp = data[i] / biggestBubble * maxSize,
-                rand1 = Math.floor((Math.random() * vMin / 30) + 1),
-                rand2 = Math.floor((Math.random() * vMin / 10) + 1);
+                rand1 = Math.floor((Math.random() * (vMin / 50)) + 1),
+                rand2 = Math.floor((Math.random() * (vMin / 30)) + 1);
+            console.log(rand1, rand2);
             var styles = {
                 'width': tmp,
                 'height': tmp,
-                'left': rand1,
-                'top': rand2
+                'margin-top': rand2,
+                'margin-bottom': rand2,
+                'margin-left': rand1,
+                'margin-right': rand1,
+                'font-size': '14px',
+                'padding-top': tmp / 2 - 7,
+                'border-radius': '50%',
+                'display': 'inline-block',
+                'position': 'relative'
             };
 
-            console.log(tmp, data[i]);
-            var content = $('<div></div>', {
+            if (rand1 < 10 && lastBr == 0) {
+                lastBr = 1;
+                $('<br />').appendTo(this);
+            }
+            $('<div></div>', {
                 class: 'bubble',
                 text: data[i]
             }).css(styles).appendTo(this);
         }
-        console.log(maxSize);
     };
 })(jQuery);

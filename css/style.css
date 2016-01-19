@@ -13,8 +13,5 @@
 }
 
 #test .bubble {
-    border-radius: 50%;
     background-color: #fff;
-    display: inline-block;
-    position: relative;
 }
